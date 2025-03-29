@@ -1,6 +1,7 @@
 <?php
 
 use App\Filament\Clusters\Products\Resources\ProductResource;
+use App\Filament\Clusters\Products\Resources\ProductResource\Pages\ListProducts;
 use App\Models\Product;
 use App\Models\User;
 
@@ -10,7 +11,7 @@ use function Pest\Livewire\livewire;
 
 describe('list', function () {
     beforeEach(function () {
-        $this->component = ListProductsTest::class;
+        $this->component = ListProducts::class;
         $this->route = ProductResource::getUrl('index');
         $this->user = User::factory()->create();
     });
@@ -22,7 +23,7 @@ describe('list', function () {
             ->assertSee('Products');
     });
 
-    test('redirect to login page if not authenticated', function () { get($this->route)->assertStatus(403)->assertRedirect(route('filament.admin.auth.login')); });
+    test('redirect to login page if not authenticated', function () { get($this->route)->assertRedirect(route('filament.admin.auth.login')); });
 
     test('display table of products', function () {
         $products = Product::factory(10)->create();
