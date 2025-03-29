@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use App\Models\Unit;
 use App\Traits\SeederTrait;
 use Illuminate\Database\Seeder;
@@ -56,5 +57,13 @@ class CoreFunctionalityTableSeeder extends Seeder
             }
         });
         $this->command->info('Units created.');
+
+        $this->command->warn(PHP_EOL.'Creating products...');
+        $products = $this->withProgressBar(1, function () {
+            foreach (Unit::all() as $unit) {
+                Product::factory(fake()->numberBetween(5, 20))->for($unit)->create();
+            }
+        });
+        $this->command->info('Products created.');
     }
 }

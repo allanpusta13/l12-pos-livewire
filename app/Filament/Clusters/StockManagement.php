@@ -13,7 +13,7 @@ class StockManagement extends Cluster
 
     // protected static ?int $navigationSort = 0;
 
-    protected static ?string $slug = 'inventory';
+    protected static ?string $slug = 'stock-management';
 
     // protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 }

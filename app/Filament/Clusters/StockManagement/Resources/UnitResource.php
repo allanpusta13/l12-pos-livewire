@@ -5,16 +5,17 @@ namespace App\Filament\Clusters\StockManagement\Resources;
 use App\Filament\Clusters\StockManagement;
 use App\Filament\Clusters\StockManagement\Resources\UnitResource\Pages;
 use App\Models\Unit;
+use App\Traits\FilamentResource\SoftDeleteTrait;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UnitResource extends Resource
 {
+    use SoftDeleteTrait;
+
     protected static ?string $model = Unit::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -83,13 +84,5 @@ class UnitResource extends Resource
         return [
             'index' => Pages\ManageUnits::route('/'),
         ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
     }
 }

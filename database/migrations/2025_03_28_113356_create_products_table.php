@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Unit::class);
             $table->decimal('price')->default(0);
             $table->boolean('is_ingredient')->default(false);
-            $table->boolean('is_active ')->default(false);
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
