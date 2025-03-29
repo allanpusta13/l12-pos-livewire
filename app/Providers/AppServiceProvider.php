@@ -48,6 +48,14 @@ class AppServiceProvider extends ServiceProvider
             $action->icon(FilamentIcon::resolve('actions::delete-action') ?? 'heroicon-m-trash');
         });
 
+        Actions\RestoreAction::configureUsing(function (Actions\RestoreAction $action) {
+            $action->icon(FilamentIcon::resolve('actions::restore-action.grouped') ?? 'heroicon-m-arrow-uturn-left');
+        });
+
+        Actions\ForceDeleteAction::configureUsing(function (Actions\ForceDeleteAction $action) {
+            $action->icon(FilamentIcon::resolve('actions::force-delete-action.grouped') ?? 'heroicon-m-trash');
+        });
+
         // tables
         Tables\Actions\CreateAction::configureUsing(function (Tables\Actions\CreateAction $action) {
             $action->icon(FilamentIcon::resolve('actions::create-action') ?? 'heroicon-m-plus')

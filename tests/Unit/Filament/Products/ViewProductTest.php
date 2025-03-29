@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
+use function Pest\Laravel\assertSoftDeleted;
 use function Pest\Laravel\get;
 use function Pest\Livewire\livewire;
 
@@ -33,5 +34,15 @@ describe('View', function () {
         actingAs($this->user);
         $livewire = livewire($this->component, ['record' => $this->product->id]);
         $livewire->assertFormSet($this->product->toArray());
+    });
+
+    test('delete product from view page', function () {
+        actingAs($this->user);
+        $livewire = livewire($this->component, ['record' => $this->product->id]);
+        $livewire
+            ->callAction('delete', $this->product->toArray())
+            ->assertHasNoActionErrors();
+
+        assertSoftDeleted($this->product);
     });
 });

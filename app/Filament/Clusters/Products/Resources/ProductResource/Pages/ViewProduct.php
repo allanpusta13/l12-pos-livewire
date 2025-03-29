@@ -15,6 +15,8 @@ class ViewProduct extends ViewRecord
         return [
             Actions\EditAction::make(),
             Actions\DeleteAction::make(),
+            Actions\RestoreAction::make(),
+            Actions\ForceDeleteAction::make(),
         ];
     }
 }
