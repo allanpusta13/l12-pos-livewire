@@ -37,7 +37,8 @@ class LocationResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('type'),
-                Tables\Columns\ToggleColumn::make('is_active'),
+                Tables\Columns\ToggleColumn::make('is_active')
+                    ->label(__('common.is_active')),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

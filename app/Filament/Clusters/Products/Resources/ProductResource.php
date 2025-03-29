@@ -46,7 +46,7 @@ class ProductResource extends Resource
                 // Todo: integrate transaction aggregation
                 Tables\Columns\TextColumn::make('stocks'),
                 Tables\Columns\ToggleColumn::make('is_active')
-                    ->label('Active'),
+                    ->label(__('common.is_active')),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
