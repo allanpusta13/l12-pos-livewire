@@ -6,6 +6,7 @@ use App\Filament\Clusters\StockManagement;
 use App\Filament\Clusters\StockManagement\Resources\UnitResource\Pages;
 use App\Models\Unit;
 use App\Traits\FilamentResource\SoftDeleteTrait;
+use App\Traits\FilamentResource\TableTrait;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,7 +15,7 @@ use Filament\Tables\Table;
 
 class UnitResource extends Resource
 {
-    use SoftDeleteTrait;
+    use SoftDeleteTrait, TableTrait;
 
     protected static ?string $model = Unit::class;
 
@@ -58,18 +59,8 @@ class UnitResource extends Resource
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->actions(static::getDefaultTableActions(softDelete: true))
+            ->bulkActions(static::getDefaultTableBulkActions(softDelete: true));
     }
 
     public static function getRelations(): array
