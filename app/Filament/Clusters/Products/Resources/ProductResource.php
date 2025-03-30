@@ -12,10 +12,13 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class ProductResource extends Resource
 {
     use SoftDeleteTrait, TableTrait;
+
+    private static $skuCounter = null;
 
     protected static ?string $model = Product::class;
 
@@ -45,6 +48,8 @@ class ProductResource extends Resource
                     ->sortable(),
                 // Todo: integrate transaction aggregation
                 Tables\Columns\TextColumn::make('stocks'),
+                Tables\Columns\ToggleColumn::make('is_public')
+                    ->label(__('common.is_public')),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label(__('common.is_active')),
             ])
@@ -77,6 +82,16 @@ class ProductResource extends Resource
         return [
             Forms\Components\Split::make([
                 Forms\Components\TextInput::make('name')
+                    ->required(),
+                Forms\Components\TextInput::make('sku')
+                    ->numeric()
+                    ->default(function (?Model $record) {
+                        if (self::$skuCounter === null) {
+                            self::$skuCounter = Product::max('sku') ?? 99999;
+
+                            return ++self::$skuCounter;
+                        }
+                    })
                     ->required(),
                 Forms\Components\Select::make('unit_id')
                     ->relationship('unit', 'name')

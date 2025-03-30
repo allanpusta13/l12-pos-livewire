@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use App\Models\Unit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ProductFactory extends Factory
 {
+    private static $skuCounter = null;
+
     /**
      * Define the model's default state.
      *
@@ -24,6 +27,18 @@ class ProductFactory extends Factory
             'unit_id' => Unit::factory(),
             'is_ingredient' => fake()->boolean(),
             'is_active' => fake()->boolean(),
+            'is_public' => fake()->boolean(),
+            'sku' => $this->generateSku(),
+            'barcode' => fake()->ean13(),
         ];
+    }
+
+    private function generateSku()
+    {
+        if (self::$skuCounter === null) {
+            self::$skuCounter = Product::max('sku') ?? 99999; // Start from 1000
+        }
+
+        return ++self::$skuCounter;
     }
 }
