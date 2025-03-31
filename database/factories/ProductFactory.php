@@ -36,6 +36,7 @@ class ProductFactory extends Factory
             'barcode' => fake()->ean13(),
             'has_composition' => self::$has_composition,
             'manage_stock' => $manage_stock,
+            'cost' => fake()->numberBetween(1, 200),
         ];
     }
 

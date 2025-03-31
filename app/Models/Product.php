@@ -38,6 +38,11 @@ class Product extends Model
         return $this->belongsTo(Unit::class);
     }
 
+    public function ingredients()
+    {
+        return $this->hasMany(ProductIngredient::class);
+    }
+
     public function batches()
     {
         return $this->morphMany(Batch::class, 'batchable');

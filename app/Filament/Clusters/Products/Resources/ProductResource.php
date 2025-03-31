@@ -14,6 +14,7 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class ProductResource extends Resource
@@ -34,6 +35,17 @@ class ProductResource extends Resource
             ->schema([
                 Forms\Components\Section::make()
                     ->schema(static::getProductSchema()),
+                Forms\Components\Section::make()
+                    ->visible(function (Get $get) {
+                        return $get('has_composition');
+                    })
+                    ->schema([
+                        Forms\Components\Repeater::make('ingredients')
+                            ->columns(3)
+                            ->columnSpanFull()
+                            ->schema(static::getIngredientSchema())
+                            ->relationship(),
+                    ]),
             ]);
     }
 
@@ -108,6 +120,9 @@ class ProductResource extends Resource
                     ->inputMode('decimal'),
                 Forms\Components\TextInput::make('cost')
                     ->numeric()
+                    ->readOnly(function (Get $get) {
+                        return $get('has_composition');
+                    })
                     ->default(0)
                     ->inputMode('decimal'),
             ]),
@@ -119,6 +134,10 @@ class ProductResource extends Resource
                         if ($state) {
                             $set('manage_stock', false);
                         }
+
+                        if ($state) {
+                            $set('ingredients', null);
+                        }
                     })
                     ->reactive(),
                 Forms\Components\Toggle::make('manage_stock')
@@ -128,5 +147,56 @@ class ProductResource extends Resource
                     ->inline(false),
             ]),
         ];
+    }
+
+    public static function getIngredientSchema(): array
+    {
+        return [
+            Forms\Components\Select::make('ingredient_id')
+                ->relationship('ingredient', 'name', modifyQueryUsing: function (Builder $query) {
+                    return $query->active();
+                })
+                ->live()
+                ->reactive()
+                ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                    $product = Product::find($state);
+                    $set('quantity', 1);
+                    $set('cost', static::computeIngredientCost(1, $product->cost));
+
+                    static::computeTotalCost($get('../../ingredients'), $set);
+                })
+                ->distinct()
+                ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                ->required(),
+            Forms\Components\TextInput::make('quantity')
+                ->numeric()
+                ->live()
+                ->reactive()
+                ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                    $product = Product::find($get('ingredient_id'));
+                    $set('cost', static::computeIngredientCost($state, $product->cost));
+                    static::computeTotalCost($get('../../ingredients'), $set);
+                })
+                ->required(),
+            Forms\Components\TextInput::make('cost')
+                ->readOnly()
+                ->afterStateHydrated(function (?Model $record, Set $set, Get $get) {
+                    $set('cost', static::computeIngredientCost($get('quantity'), $record->ingredient->cost));
+                    static::computeTotalCost($get('../../ingredients'), $set);
+                })
+                ->inputMode('decimal')
+                ->numeric(),
+        ];
+    }
+
+    public static function computeIngredientCost($quantity, $cost)
+    {
+        return $quantity * $cost;
+    }
+
+    public static function computeTotalCost($ingredients, $set)
+    {
+        $total_cost = collect($ingredients)->sum('cost');
+        $set('../../cost', $total_cost);
     }
 }
