@@ -4,6 +4,7 @@ namespace App\Filament\Clusters\Products\Resources;
 
 use App\Filament\Clusters\Products;
 use App\Filament\Clusters\Products\Resources\ProductResource\Pages;
+use App\Filament\Clusters\Products\Resources\ProductResource\RelationManagers\BatchesRelationManager;
 use App\Models\Product;
 use App\Traits\FilamentResource\SoftDeleteTrait;
 use App\Traits\FilamentResource\TableTrait;
@@ -78,7 +79,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            BatchesRelationManager::class,
         ];
     }
 

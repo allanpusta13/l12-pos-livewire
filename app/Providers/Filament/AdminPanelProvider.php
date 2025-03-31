@@ -62,6 +62,7 @@ class AdminPanelProvider extends PanelProvider
             ->defaultThemeMode(ThemeMode::Light)
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->readOnlyRelationManagersOnResourceViewPagesByDefault(false);
     }
 }
