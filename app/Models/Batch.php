@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Batch extends Model
@@ -13,17 +12,16 @@ class Batch extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'batchable_id',
-        'batchable_type',
+        'product_id',
         'location_id',
         'batch_number',
         'expiry_date',
         'status',
     ];
 
-    public function batchable(): MorphTo
+    public function product()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Product::class);
     }
 
     public function location()
