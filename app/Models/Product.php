@@ -18,26 +18,24 @@ class Product extends Model
         'name',
         'description',
         'price',
+        'cost',
         'unit_id',
-        'is_ingredient',
+        'has_composition',
         'is_active',
         'is_public',
+        'manage_stock',
     ];
 
     protected $casts = [
-        'is_ingredient' => 'boolean',
+        'has_composition' => 'boolean',
         'is_active' => 'boolean',
         'is_public' => 'boolean',
+        'manage_stock' => 'boolean',
     ];
 
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class);
-    }
-
-    public function scopeIngredient($query)
-    {
-        return $query->where('is_ingredient', true);
     }
 
     public function batches()

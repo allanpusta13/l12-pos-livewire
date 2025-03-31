@@ -9,6 +9,8 @@ use App\Traits\FilamentResource\SoftDeleteTrait;
 use App\Traits\FilamentResource\TableTrait;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -104,7 +106,25 @@ class ProductResource extends Resource
                     ->numeric()
                     ->default(0)
                     ->inputMode('decimal'),
-                Forms\Components\Toggle::make('is_ingredient')
+                Forms\Components\TextInput::make('cost')
+                    ->numeric()
+                    ->default(0)
+                    ->inputMode('decimal'),
+            ]),
+            Forms\Components\Split::make([
+                Forms\Components\Toggle::make('has_composition')
+                    ->inline(false)
+                    ->live()
+                    ->afterStateUpdated(function ($state, Set $set) {
+                        if ($state) {
+                            $set('manage_stock', false);
+                        }
+                    })
+                    ->reactive(),
+                Forms\Components\Toggle::make('manage_stock')
+                    ->hidden(function (Get $get) {
+                        return $get('has_composition');
+                    })
                     ->inline(false),
             ]),
         ];
