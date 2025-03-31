@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\Model\HasActiveScope;
 use App\Traits\Model\HasPublicScope;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,6 +46,11 @@ class Product extends Model
 
     public function batches()
     {
-        return $this->morphMany(Batch::class, 'batchable');
+        return $this->hasMany(Batch::class);
+    }
+
+    public function stocks(): Attribute
+    {
+        return Attribute::make(get: fn () => $this->batches->sum('stocks') ?? 0);
     }
 }

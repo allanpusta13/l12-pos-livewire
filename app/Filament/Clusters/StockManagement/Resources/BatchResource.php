@@ -64,9 +64,8 @@ class BatchResource extends Resource
                     })
                     ->sortable()
                     ->date(),
-                Tables\Columns\TextColumn::make('transactions_sum_quantity')
+                Tables\Columns\TextColumn::make('stocks')
                     ->label('Quantity')
-                    ->sum('transactions', 'quantity')
                     ->action(Tables\Actions\Action::make('adjust')
                         ->form(function (Form $form) {
                             return $form
@@ -84,9 +83,17 @@ class BatchResource extends Resource
                             $data['type'] = InventoryTransactionTypeEnum::ADJUSTMENT->value;
                             $record->transactions()->create($data);
                         }), ),
+                Tables\Columns\TextColumn::make('product.unit.abbreviation'),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('location')
+                    ->relationship('location', 'name', modifyQueryUsing: function (Builder $query) {
+                        return $query->active();
+                    }),
+                Tables\Filters\SelectFilter::make('product')
+                    ->relationship('product', 'name', modifyQueryUsing: function (Builder $query) {
+                        return $query->active()->where('manage_stock', true);
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

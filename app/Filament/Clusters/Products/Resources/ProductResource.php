@@ -61,9 +61,10 @@ class ProductResource extends Resource
                     ->searchable()
                     ->sortable(),
                 // Todo: integrate transaction aggregation
-                Tables\Columns\TextColumn::make('stocks'),
+                Tables\Columns\TextColumn::make('stocks')
+                    ->label('Stocks'),
                 Tables\Columns\ToggleColumn::make('is_public')
-                    ->label(__('common.is_public')),
+                    ->label(__('product.is_public')),
                 Tables\Columns\ToggleColumn::make('is_active')
                     ->label(__('common.is_active')),
             ])
