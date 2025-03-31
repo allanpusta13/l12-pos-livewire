@@ -19,6 +19,10 @@ class Batch extends Model
         'status',
     ];
 
+    protected $casts = [
+        'expiry_date' => 'date',
+    ];
+
     public function product()
     {
         return $this->belongsTo(Product::class);
@@ -27,5 +31,10 @@ class Batch extends Model
     public function location()
     {
         return $this->belongsTo(Location::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(InventoryTransaction::class);
     }
 }
