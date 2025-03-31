@@ -39,4 +39,9 @@ class Product extends Model
     {
         return $query->where('is_ingredient', true);
     }
+
+    public function batches()
+    {
+        return $this->morphMany(Batch::class, 'batchable');
+    }
 }
