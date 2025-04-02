@@ -58,12 +58,13 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('unit.abbreviation')
-                    ->searchable()
-                    ->sortable(),
                 // Todo: integrate transaction aggregation
                 Tables\Columns\TextColumn::make('stocks')
                     ->label('Stocks'),
+                Tables\Columns\TextColumn::make('unit.abbreviation')
+                    ->searchable()
+                    ->sortable(),
+
                 Tables\Columns\ToggleColumn::make('is_public')
                     ->label(__('product.is_public')),
                 Tables\Columns\ToggleColumn::make('is_active')
@@ -71,6 +72,8 @@ class ProductResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\SelectFilter::make('unit_id')
+                    ->relationship('unit', 'name'),
             ])
             ->actions(static::getDefaultTableActions(softDelete: true))
             ->bulkActions(static::getDefaultTableBulkActions(softDelete: true));
@@ -183,7 +186,7 @@ class ProductResource extends Resource
             Forms\Components\TextInput::make('cost')
                 ->readOnly()
                 ->afterStateHydrated(function (?Model $record, Set $set, Get $get) {
-                    $set('cost', static::computeIngredientCost($get('quantity'), $record->ingredient->cost));
+                    $set('cost', static::computeIngredientCost($get('quantity'), $record?->ingredient->cost ?? 0));
                     static::computeTotalCost($get('../../ingredients'), $set);
                 })
                 ->inputMode('decimal')

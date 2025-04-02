@@ -25,6 +25,6 @@ class BatchesRelationManager extends RelationManager
 
     public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
     {
-        return $pageClass == ViewProduct::class;
+        return $pageClass == ViewProduct::class && $ownerRecord->manage_stock;
     }
 }

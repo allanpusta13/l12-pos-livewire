@@ -7,6 +7,8 @@ use App\Filament\Clusters\StockManagement;
 use App\Filament\Clusters\StockManagement\Resources\BatchResource\Pages;
 use App\Models\Batch;
 use App\Models\Product;
+use App\Traits\FilamentResource\SoftDeleteTrait;
+use App\Traits\FilamentResource\TableTrait;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
@@ -18,6 +20,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class BatchResource extends Resource
 {
+    use SoftDeleteTrait, TableTrait;
+
     private static $batchCounter = null;
 
     protected static ?string $model = Batch::class;
@@ -31,9 +35,14 @@ class BatchResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Grid::make()
+                    ->visibleOn(['create', 'edit'])
+                    ->schema(static::getBatchSchema()),
+                Forms\Components\Section::make('Batch Details')
+                    ->visibleOn('view')
+                    ->columns(3)
                     ->schema(static::getBatchSchema()),
                 Forms\Components\Grid::make()
-                    ->hiddenOn('edit')
+                    ->hiddenOn(['view', 'edit'])
                     ->schema([
                         Forms\Components\TextInput::make('transactions.0.quantity')
                             ->default(0)
@@ -94,10 +103,9 @@ class BatchResource extends Resource
                     ->relationship('product', 'name', modifyQueryUsing: function (Builder $query) {
                         return $query->active()->where('manage_stock', true);
                     }),
+                Tables\Filters\TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
+            ->actions(static::getDefaultTableActions(softDelete: true))
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
@@ -118,6 +126,7 @@ class BatchResource extends Resource
     {
         return [
             'index' => Pages\ManageBatches::route('/'),
+            'view' => Pages\ViewBatch::route('/{record}'),
         ];
     }
 
@@ -130,10 +139,13 @@ class BatchResource extends Resource
                 })
                 ->afterStateUpdated(function ($state, Set $set) {
                     $product = Product::find($state);
-                    $set('transactions.0.unit_id', $product->unit_id);
+                    if ($product) {
+                        $set('transactions.0.unit_id', $product?->unit_id);
+                    }
                 })
                 ->live()
                 ->reactive()
+                ->hiddenOn('edit')
                 ->required(),
             Forms\Components\Select::make('location_id')
                 ->relationship('location', 'name', modifyQueryUsing: function (Builder $query) {
