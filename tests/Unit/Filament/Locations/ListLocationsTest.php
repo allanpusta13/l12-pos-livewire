@@ -23,7 +23,7 @@ describe('list', function () {
             ->assertSee('Locations');
     });
 
-    test('redirect to login page if not authenticated', function () { get($this->route)->assertRedirect(route('filament.admin.auth.login')); });
+    test('redirect to login page if not authenticated', function () { get($this->route)->assertRedirect(route('login')); });
 
     test('display table of locations', function () {
         $locations = Location::factory(10)->create();

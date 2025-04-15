@@ -24,7 +24,7 @@ describe('List', function () {
         Batch::factory(10)->create();
         get($this->route)
             ->assertStatus(302)
-            ->assertRedirectToRoute('filament.admin.auth.login');
+            ->assertRedirectToRoute('login');
     });
 
     // TODO: Implement Roles and Permissions
@@ -32,7 +32,7 @@ describe('List', function () {
     //     Batch::factory(10)->create();
     //     get($this->route)
     //         ->assertStatus(403)
-    //         ->assertRedirectToRoute('filament.admin.auth.login');
+    //         ->assertRedirectToRoute('login');
     // });
 
     test('render the batches index page', function () {

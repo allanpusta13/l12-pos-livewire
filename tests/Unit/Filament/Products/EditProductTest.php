@@ -26,9 +26,9 @@ describe('Edit', function () {
     });
 
     test('redirect to login page if not authenticated', function (){
-    get($this->route)
-    ->assertRedirect(route('filament.admin.auth.login'));
-        });
+        get($this->route)
+            ->assertRedirect(route('login'));
+    });
 
     test('edit a product', function () {
         actingAs($this->user);
