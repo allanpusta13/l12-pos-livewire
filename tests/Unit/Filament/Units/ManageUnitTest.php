@@ -27,7 +27,7 @@ describe('List', function () {
         Unit::factory(10)->create();
         get($this->route)
             ->assertStatus(302)
-            ->assertRedirectToRoute('filament.admin.auth.login');
+            ->assertRedirectToRoute('login');
     });
 
     // TODO: Implement Roles and Permissions
@@ -35,7 +35,7 @@ describe('List', function () {
     //     Unit::factory(10)->create();
     //     get($this->route)
     //         ->assertStatus(403)
-    //         ->assertRedirectToRoute('filament.admin.auth.login');
+    //         ->assertRedirectToRoute('login');
     // });
 
     test('render the units index page', function () {

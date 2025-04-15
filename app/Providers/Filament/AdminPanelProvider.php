@@ -27,10 +27,10 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
-            ->registration()
-            ->passwordReset()
-            ->emailVerification()
+            // ->login()
+            // ->registration()
+            // ->passwordReset()
+            // ->emailVerification()
             ->profile(isSimple: true)
             ->colors([
                 'primary' => Color::Indigo,
@@ -62,6 +62,7 @@ class AdminPanelProvider extends PanelProvider
             ->defaultThemeMode(ThemeMode::Light)
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->readOnlyRelationManagersOnResourceViewPagesByDefault(false);
     }
 }
