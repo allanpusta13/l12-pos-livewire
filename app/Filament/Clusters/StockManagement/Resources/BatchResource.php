@@ -5,6 +5,7 @@ namespace App\Filament\Clusters\StockManagement\Resources;
 use App\Enums\InventoryTransactionTypeEnum;
 use App\Filament\Clusters\StockManagement;
 use App\Filament\Clusters\StockManagement\Resources\BatchResource\Pages;
+use App\Filament\Clusters\StockManagement\Resources\BatchResource\RelationManagers\TransactionsRelationManager;
 use App\Models\Batch;
 use App\Models\Product;
 use App\Traits\FilamentResource\SoftDeleteTrait;
@@ -118,7 +119,7 @@ class BatchResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            TransactionsRelationManager::class,
         ];
     }
 

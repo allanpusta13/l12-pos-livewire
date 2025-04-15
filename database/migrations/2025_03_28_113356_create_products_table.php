@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->longText('description')->nullable();
             $table->string('barcode')->nullable();
-            $table->foreignIdFor(Unit::class);
+            $table->foreignIdFor(Unit::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->decimal('price')->default(0);
             $table->decimal('cost')->default(0);
             $table->boolean('has_composition')->default(false);

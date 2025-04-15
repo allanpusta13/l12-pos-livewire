@@ -15,12 +15,13 @@ return new class extends Migration
     {
         Schema::create('inventory_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Batch::class);
-            $table->foreignIdFor(Unit::class);
+            $table->foreignIdFor(Batch::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignIdFor(Unit::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->decimal('quantity')->default(0);
             $table->string('type');
             $table->longText('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

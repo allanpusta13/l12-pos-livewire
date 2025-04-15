@@ -14,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('product_ingredients', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Product::class)->constrained();
-            $table->foreignId('ingredient_id')->references('id')->on('products')->constrained();
+            $table->foreignIdFor(Product::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('ingredient_id')->references('id')->on('products')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->decimal('quantity')->nullable();
             $table->timestamps();
         });
