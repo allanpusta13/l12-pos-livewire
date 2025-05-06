@@ -7,6 +7,7 @@ use Filament\Forms;
 use Filament\Support\Facades\FilamentIcon;
 use Filament\Tables;
 use Illuminate\Support\ServiceProvider;
+use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -96,6 +97,12 @@ class AppServiceProvider extends ServiceProvider
             $component
                 ->suffixIcon('heroicon-m-calendar')
                 ->native(false);
+        });
+
+        PhoneInput::configureUsing(function (PhoneInput $component) {
+            $component
+                ->prefixIcon('heroicon-m-phone')
+                ->placeholder('&nbsp;');
         });
     }
 }
