@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Enums\ContactTypeEnum;
 use App\Traits\Model\HasActiveScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contact extends Model
 {
-    use HasActiveScope;
+    use HasActiveScope, SoftDeletes;
 
     protected $fillable = [
         'name',
