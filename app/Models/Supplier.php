@@ -16,6 +16,15 @@ class Supplier extends Model
     /** @use HasFactory<\Database\Factories\SupplierFactory> */
     use HasActiveScope, HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'address',
+        'is_active',
+        'type',
+    ];
+
     protected $casts = [
         'is_active' => 'boolean',
         'type' => ContactTypeEnum::class,
