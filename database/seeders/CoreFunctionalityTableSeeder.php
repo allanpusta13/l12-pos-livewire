@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Unit;
 use App\Traits\SeederTrait;
@@ -65,5 +66,12 @@ class CoreFunctionalityTableSeeder extends Seeder
             }
         });
         $this->command->info('Products created.');
+
+        $this->command->warn(PHP_EOL.'Creating customers...');
+        $customers = $this->withProgressBar(1, function () {
+            Customer::factory(fake()->numberBetween(5, 20))->create();
+
+        });
+        $this->command->info('Customers created.');
     }
 }
