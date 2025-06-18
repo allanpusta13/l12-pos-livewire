@@ -104,5 +104,11 @@ class AppServiceProvider extends ServiceProvider
                 ->prefixIcon('heroicon-m-phone')
                 ->placeholder('&nbsp;');
         });
+
+        Forms\Components\DateTimePicker::configureUsing(function (Forms\Components\DateTimePicker $component) {
+            $component
+                ->suffixIcon('heroicon-m-calendar')
+                ->native(false);
+        });
     }
 }

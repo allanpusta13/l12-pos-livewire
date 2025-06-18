@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained('contacts')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('customer_id')->nullable()->constrained('contacts')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(Location::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->dateTime('date');
             $table->string('reference')->unique();
